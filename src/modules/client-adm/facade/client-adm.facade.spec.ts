@@ -34,40 +34,66 @@ describe("ClientAdmFacade test", () => {
         });
 
         const input = {
-            id: "1",
-            name: "Client 1",
-            email: "x@x.com",
-            address: "Address 1",
+            id: '1',
+            name: 'Client 1',
+            email: 'x@x.com',
+            document: 'document',
+            address: {
+                street: 'street',
+                number: 'number',
+                complement: 'complement',
+                city: 'city',
+                state: 'state',
+                zipCode: 'zipcode',
+            },
         };
 
         await facade.add(input);
 
         const client = await ClientModel.findOne({ where: { id: "1" } });
 
-        expect(client).toBeDefined();
-        expect(client.name).toBe(input.name);
-        expect(client.email).toBe(input.email);
-        expect(client.address).toBe(input.address);
+        expect(client).toBeDefined()
+        expect(client.name).toEqual(input.name)
+        expect(client.email).toEqual(input.email)
+        expect(client.document).toEqual(input.document)
+        expect(client.street).toEqual(input.address.street)
+        expect(client.number).toEqual(input.address.number)
+        expect(client.zipCode).toEqual(input.address.zipCode)
+        expect(client.state).toEqual(input.address.state)
+        expect(client.complement).toEqual(input.address.complement)
+        expect(client.city).toEqual(input.address.city)
+
     });
 
-    it("should find a client", async () => {
-        const facade = ClientAdmFacadeFactory.create();
+    it('should find a client', async () => {
+        const facade = ClientAdmFacadeFactory.create()
 
-        const input = {
-            id: "1",
-            name: "Client 1",
-            email: "x@x.com",
-            address: "Address 1",
-        };
+        const client = await ClientModel.create({
+            id: '1',
+            name: 'Client 1',
+            email: 'x@x.com',
+            document: 'document',
+            street: 'street',
+            number: 'number',
+            complement: 'complement',
+            city: 'city',
+            state: 'state',
+            zipCode: 'zipcode',
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        })
 
-        await facade.add(input);
+        const result = await facade.find({ id: client.id })
 
-        const client = await facade.find({ id: "1" });
-
-        expect(client).toBeDefined();
-        expect(client.id).toBe(input.id);
-        expect(client.name).toBe(input.name);
-        expect(client.email).toBe(input.email);
-        expect(client.address).toBe(input.address);
-    });
+        expect(result).toBeDefined()
+        expect(result.id).toEqual(client.id)
+        expect(result.name).toEqual(client.name)
+        expect(result.email).toEqual(client.email)
+        expect(result.address.street).toEqual(client.street)
+        expect(result.address.number).toEqual(client.number)
+        expect(result.address.zipCode).toEqual(client.zipCode)
+        expect(result.address.state).toEqual(client.state)
+        expect(result.address.complement).toEqual(client.complement)
+        expect(result.address.city).toEqual(client.city)
+    })
 });

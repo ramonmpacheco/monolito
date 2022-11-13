@@ -4,34 +4,29 @@ import Id from "../../@shared/domain/value-object/id.value-object";
 import Address from "./address-value-object";
 
 type ClientProps = {
-    id?: Id
-    name: string
+    id?: Id;
+    name: string;
+    email: string;
+    address: Address;
     document: string
-    email: string
-    address: Address
-    createdAt?: Date
-    updatedAt?: Date
-};
+}
 
 export default class Client extends BaseEntity implements AggregateRoot {
-    private _name: string
+    private _name: string;
+    private _email: string;
+    private _address: Address;
     private _document: string
-    private _email: string
-    private _address: Address
 
     constructor(props: ClientProps) {
-        super(props.id, props.createdAt, props.updatedAt)
-        this._name = props.name
-        this._document = props.document
-        this._email = props.email
+        super(props.id);
+        this._name = props.name;
+        this._email = props.email;
         this._address = props.address
-    }
-    get name(): string {
-        return this._name
+        this._document = props.document
     }
 
-    get document(): string {
-        return this._document
+    get name(): string {
+        return this._name
     }
 
     get email(): string {
@@ -40,5 +35,9 @@ export default class Client extends BaseEntity implements AggregateRoot {
 
     get address(): Address {
         return this._address
+    }
+
+    get document(): string {
+        return this._document
     }
 }
